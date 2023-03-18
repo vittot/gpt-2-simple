@@ -467,7 +467,8 @@ def generate(sess,
         f = codecs.open(destination_path, 'w', 'utf-8')
     generated = 0
     gen_texts = []
-    while generated < nsamples:
+    print('Starting generation')
+    for generated in tqdm(range(0, nsamples, batch_size)):
         if not prefix:
             out = sess.run(output)
         else:
@@ -475,7 +476,6 @@ def generate(sess,
                     context: batch_size * [context_tokens]
                 })
         for i in range(batch_size):
-            generated += 1
             gen_text = enc.decode(out[i])
             if prefix:
                 gen_text = enc.decode(context_tokens[:1]) + gen_text
